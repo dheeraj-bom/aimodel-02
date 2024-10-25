@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Prediction</title>
+</head>
+<body>
+    <h1>News Prediction</h1>
+    <form id="predictForm">
+        <label for="title">News Title:</label><br>
+        <input type="text" id="title" name="title"><br><br>
+        
+        <label for="body">News Body:</label><br>
+        <textarea id="body" name="body"></textarea><br><br>
+        
+        <button type="button" onclick="makePrediction()">Submit</button>
+    </form>
+
+    <h2>Prediction Results:</h2>
+    <p>Category: <span id="category"></span></p>
+    <p>Tags: <span id="tags"></span></p>
+    <p>Type: <span id="type"></span></p>
+
+    <script>
+        async function makePrediction() {
+            const title = document.getElementById('title').value;
+            const body = document.getElementById('body').value;
+            
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, body })
+            });
+
+            const result = await response.json();
+            document.getElementById('category').innerText = result.category;
+            document.getElementById('tags').innerText = result.tags.join(", ");
+            document.getElementById('type').innerText = result.type;
+        }
+    </script>
+</body>
+</html>
